@@ -6,11 +6,12 @@ interface Props {
   width: number
   height: number
   items: DiskItem[]
+  isAllowed: boolean
 
   onSelect: (x: number, y: number) => void
 }
 
-export function Board({ width, height, items, onSelect }: Props) {
+export function Board({ width, height, items, isAllowed, onSelect }: Props) {
   const rows = new Array(height).fill(0)
   const columns = new Array(width).fill(0)
 
@@ -39,7 +40,7 @@ export function Board({ width, height, items, onSelect }: Props) {
                   onSelect(j, i)
                 }}
               >
-                {item && (
+                {item && (isAllowed || !item.isPreview) && (
                   <Disk
                     // ref={ref => {
                     //   // if (ref) {

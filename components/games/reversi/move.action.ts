@@ -31,6 +31,7 @@ export function moveAction(
   }
 
   if (!room.possibleMoves.find((x) => x.x === point.x && x.y === point.y)) {
+    console.log('rr', room, props)
     throw new Error('INVALID_MOVE')
   }
 

@@ -48,11 +48,9 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
     const startIndex = lastGameActions.map((x) => x.type).lastIndexOf('INIT')
     lastGameActions = lastGameActions.slice(startIndex)
 
-    console.log('actions3', lastGameActions)
-
     return lastGameActions.reduce(
       (r, x) => {
-        const t = reversiGameReducer(r, x)
+        const t = reversiGameReducer(r, x, { currentUserId: address! })
 
         return t[0]
       },
@@ -109,6 +107,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
 
   return (
     <Board
+      isAllowed={state.activeUserId === address}
       width={WIDTH}
       height={HEIGHT}
       items={items}
