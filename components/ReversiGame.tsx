@@ -17,7 +17,7 @@ type Props = {
 const WIDTH = 6
 const HEIGHT = 6
 
-const getInitialAction = (userId: string, userIds: string[]) =>
+export const getInitialAction = (userId: string, userIds: string[]) =>
   ({
     type: 'INIT',
     width: WIDTH,
@@ -31,7 +31,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
   const { address } = useContext(WalletContext)
 
   const state = React.useMemo(() => {
-    const tt = actions
+    let lastGameActions = actions
       .map((x) => {
         try {
           return JSON.parse(x) as any
@@ -41,11 +41,16 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
       })
       .filter((x) => !!x)
 
-    if (!tt.length) {
-      tt.push(getInitialAction(address!, userIds))
+    if (!lastGameActions.length) {
+      lastGameActions.push(getInitialAction(address!, userIds))
     }
 
-    return tt.reduce(
+    const startIndex = lastGameActions.map((x) => x.type).lastIndexOf('INIT')
+    lastGameActions = lastGameActions.slice(startIndex)
+
+    console.log('actions3', lastGameActions)
+
+    return lastGameActions.reduce(
       (r, x) => {
         const t = reversiGameReducer(r, x)
 
@@ -53,7 +58,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
       },
       [{} as any]
     )
-  }, [actions]) as ReversiRoomState
+  }, [actions, userIds, address]) as ReversiRoomState
 
   const items = React.useMemo(() => {
     const flatItems = (state.cells ?? [])
@@ -98,7 +103,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
             } as DiskItem)
         )
       )
-  }, [state])
+  }, [state, address])
 
   console.log(state)
 
@@ -111,15 +116,35 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
         if (!state.moves.length) {
           onSend(`Let's play Reversi at: ${process.env.NEXT_PUBLIC_URL}`)
 
-          onSend(JSON.stringify(getInitialAction(address!, userIds)))
+          onSend(JSON.stringify(getInitialAction(address!, userIds), null, 2))
+
+          setTimeout(() => {
+            onSend(
+              JSON.stringify(
+                {
+                  type: 'MOVE',
+                  userId: address,
+                  point: { x, y },
+                } as ReversiRoomAction,
+                null,
+                2
+              )
+            )
+          }, 100)
+
+          return
         }
 
         onSend(
-          JSON.stringify({
-            type: 'MOVE',
-            userId: address,
-            point: { x, y },
-          } as ReversiRoomAction)
+          JSON.stringify(
+            {
+              type: 'MOVE',
+              userId: address,
+              point: { x, y },
+            } as ReversiRoomAction,
+            null,
+            2
+          )
         )
       }}
     />

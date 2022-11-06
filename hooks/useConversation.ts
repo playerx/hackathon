@@ -56,7 +56,6 @@ const useConversation = (
           msg.senderAddress !== walletAddress &&
           !browserVisible
         ) {
-          console.log('AAAAA', msg)
           const name = await lookupAddress(msg.senderAddress ?? '')
           new Notification('XMTP', {
             body: `${name || shortAddress(msg.senderAddress ?? '')}\n${truncate(

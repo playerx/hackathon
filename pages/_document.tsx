@@ -1,9 +1,9 @@
 import Document, {
-  Html,
+  DocumentContext,
   Head,
+  Html,
   Main,
   NextScript,
-  DocumentContext,
 } from 'next/document'
 
 class AppDocument extends Document {
@@ -16,7 +16,7 @@ class AppDocument extends Document {
     return (
       <Html className="h-full bg-gray-100">
         <Head>
-          <meta name="description" content="Chat via XMTP" />
+          <meta name="description" content="Games via XMTP" />
           <link rel="icon" href="/favicon.ico" />
           <link
             href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700|Inconsolata:400,600,700&display=swap"

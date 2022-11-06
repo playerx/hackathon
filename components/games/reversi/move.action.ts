@@ -22,9 +22,9 @@ export function moveAction(
     throw new Error('ROOM_ALREADY_FINISHED')
   }
 
-  if (room.activeUserId === userId) {
-    return [room, []]
-  }
+  // if (room.activeUserId === userId) {
+  //   throw new Error('INVALID_USER')
+  // }
 
   if (room.cells[point.y][point.x]) {
     throw new Error('CELL_ALREADY_USED')

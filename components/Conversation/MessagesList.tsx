@@ -1,9 +1,8 @@
 import { Message } from '@xmtp/xmtp-js'
 import React, { MutableRefObject } from 'react'
-import Emoji from 'react-emoji-render'
-import Avatar from '../Avatar'
 import { formatTime } from '../../helpers'
 import AddressPill from '../AddressPill'
+import Avatar from '../Avatar'
 
 export type MessageListProps = {
   messages: Message[]
@@ -35,7 +34,8 @@ const MessageTile = ({ message }: MessageTileProps): JSX.Element => (
         {message.error ? (
           `Error: ${message.error?.message}`
         ) : (
-          <Emoji text={message.content || ''} />
+          <pre>{message.content || ''}</pre>
+          // <Emoji text={} />
         )}
       </span>
     </div>

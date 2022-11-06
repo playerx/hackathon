@@ -10,7 +10,7 @@ export function initAction(
   _: ReversiRoomState,
   props: ActionOf<'INIT'>
 ): ReducedResult<ReversiRoomState, ReversiRoomEvent> {
-  const { width, height, userIds, userId } = props
+  const { width, height, userIds } = props
 
   const events: ReversiRoomEvent[] = []
 
@@ -18,7 +18,7 @@ export function initAction(
     status: 'ACTIVE',
     width,
     height,
-    activeUserId: userId,
+    activeUserId: userIds[0],
     winnerUserId: null,
     players: userIds.map((x) => ({ userId: x, disksCount: 2 })),
     moves: [],

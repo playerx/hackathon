@@ -85,7 +85,7 @@ const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Chat via XMTP</title>
+        <title>Games via XMTP</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
