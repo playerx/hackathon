@@ -1,9 +1,9 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
 import { Client, Conversation, Message } from '@xmtp/xmtp-js'
 import { Signer } from 'ethers'
-import { getEnv } from '../helpers'
-import { XmtpContext, XmtpContextType } from '../contexts/xmtp'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { WalletContext } from '../contexts/wallet'
+import { XmtpContext, XmtpContextType } from '../contexts/xmtp'
+import { getEnv } from '../helpers'
 
 export const XmtpProvider: React.FC = ({ children }) => {
   const [client, setClient] = useState<Client | null>()
@@ -21,7 +21,22 @@ export const XmtpProvider: React.FC = ({ children }) => {
     async (wallet: Signer) => {
       if (wallet && !client) {
         try {
-          setClient(await Client.create(wallet, { env: getEnv() }))
+          const cachedKeys = localStorage.getItem('keys')
+
+          const keys = cachedKeys
+            ? new Uint8Array(Buffer.from(cachedKeys.split(',').map((x) => +x)))
+            : await Client.getKeys(wallet, { env: 'dev' })
+
+          if (!cachedKeys) {
+            localStorage.setItem('keys', keys.toString())
+          }
+
+          setClient(
+            await Client.create(wallet, {
+              env: getEnv(),
+              privateKeyOverride: keys,
+            })
+          )
         } catch (e) {
           console.error(e)
           setClient(null)
