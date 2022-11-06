@@ -3,7 +3,7 @@ import {
   ReducedResult,
   ReversiRoomEvent,
   ReversiRoomState,
-} from '../domain/types'
+} from './domain/types'
 
 export function joinAction(
   room: ReversiRoomState,

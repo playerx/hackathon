@@ -1,12 +1,12 @@
-import { analyzeWinner } from '../domain/analyzeWinner'
-import { generatePossibleMoves } from '../domain/generatePossibleMoves'
-import { getReversedDisks } from '../domain/getReversedDisks'
+import { analyzeWinner } from './domain/analyzeWinner'
+import { generatePossibleMoves } from './domain/generatePossibleMoves'
+import { getReversedDisks } from './domain/getReversedDisks'
 import {
   ActionOf,
   ReducedResult,
   ReversiRoomEvent,
   ReversiRoomState,
-} from '../domain/types'
+} from './domain/types'
 
 export function moveAction(
   room: ReversiRoomState,

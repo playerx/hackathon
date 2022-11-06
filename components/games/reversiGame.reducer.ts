@@ -3,7 +3,7 @@ import {
   ReversiRoomAction,
   ReversiRoomEvent,
   ReversiRoomState,
-} from './domain/types'
+} from './reversi/domain/types'
 import { initAction } from './reversi/init.action'
 import { joinAction } from './reversi/join.action'
 import { joinAsPlayerAction } from './reversi/joinAsPlayer.action'
