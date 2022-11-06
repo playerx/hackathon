@@ -112,6 +112,10 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
       height={HEIGHT}
       items={items}
       onSelect={(x, y) => {
+        if (state.activeUserId !== address) {
+          return
+        }
+
         if (!state.moves.length) {
           onSend(`Let's play Reversi at: ${process.env.NEXT_PUBLIC_URL}`)
 

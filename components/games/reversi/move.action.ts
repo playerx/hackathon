@@ -26,9 +26,9 @@ export function moveAction(
   //   throw new Error('INVALID_USER')
   // }
 
-  if (room.cells[point.y][point.x]) {
-    throw new Error('CELL_ALREADY_USED')
-  }
+  // if (room.cells[point.y][point.x]) {
+  //   throw new Error('CELL_ALREADY_USED')
+  // }
 
   if (!room.possibleMoves.find((x) => x.x === point.x && x.y === point.y)) {
     console.log('rr', room, props)
