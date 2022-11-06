@@ -102,10 +102,10 @@ const ConversationTile = ({
             </div>
             <p
               className={classNames(
-                'text-[13px] md:text-sm font-normal text-ellipsis mt-0',
+                'text-[13px] md:text-sm text-ellipsis mt-0',
                 isSelected ? 'text-n-500' : 'text-n-300',
                 loadingConversations ? 'animate-pulse' : '',
-                moveInfo.highlight ? 'font-bold' : ''
+                moveInfo.highlight ? 'font-black' : 'font-normal'
               )}
             >
               {moveInfo.message && truncate(moveInfo.message, 75)}
