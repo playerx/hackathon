@@ -25,7 +25,7 @@ export const XmtpProvider: React.FC = ({ children }) => {
 
           const keys = cachedKeys
             ? new Uint8Array(Buffer.from(cachedKeys.split(',').map((x) => +x)))
-            : await Client.getKeys(wallet, { env: 'dev' })
+            : await Client.getKeys(wallet, { env: getEnv() })
 
           if (!cachedKeys) {
             localStorage.setItem('keys', keys.toString())
