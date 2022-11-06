@@ -48,9 +48,25 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
     const startIndex = lastGameActions.map((x) => x.type).lastIndexOf('INIT')
     lastGameActions = lastGameActions.slice(startIndex)
 
-    console.log('lastGameActions', lastGameActions)
+    const finalActions: any[] = []
 
-    return lastGameActions.reduce(
+    for (const action of lastGameActions) {
+      if (finalActions.find((x: any) => x.index === action.index)) {
+        continue
+      }
+
+      finalActions.push(action)
+    }
+
+    // const indexArray = lastGameActions.map((x) => x.index)
+
+    // lastGameActions = lastGameActions.filter(
+    //   (x, i) => indexArray.lastIndexOf(x.index) === i
+    // )
+
+    console.log('lastGameActions', finalActions)
+
+    return finalActions.reduce(
       (r, x) => {
         const t = reversiGameReducer(r, x)
 
@@ -114,6 +130,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
       height={HEIGHT}
       items={items}
       onSelect={(x, y) => {
+        console.log('move request', x, y, state.activeUserId, address)
         if (state.activeUserId !== address) {
           return
         }
@@ -130,6 +147,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
                   type: 'MOVE',
                   userId: address,
                   point: { x, y },
+                  index: state.moves.length + 1,
                 } as ReversiRoomAction,
                 null,
                 2
@@ -146,6 +164,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
               type: 'MOVE',
               userId: address,
               point: { x, y },
+              index: state.moves.length + 1,
             } as ReversiRoomAction,
             null,
             2

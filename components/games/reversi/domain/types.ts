@@ -56,6 +56,7 @@ export type ReversiRoomAction =
       type: 'MOVE'
       userId: string
       point: Point
+      index: number
     }
 
 export type ReversiRoomEvent =

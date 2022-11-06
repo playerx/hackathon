@@ -117,7 +117,10 @@ const Conversation = ({
           <ReversiGame
             userIds={[address!, recipientWalletAddr]}
             actions={plainMessages}
-            onSend={(action) => sendMessage(action)}
+            onSend={(action) => {
+              console.log('sending', action)
+              sendMessage(action)
+            }}
           />
         </section>
       )}
