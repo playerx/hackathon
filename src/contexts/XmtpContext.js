@@ -1,5 +1,5 @@
-import React, { useState, createContext, useEffect, useContext } from "react";
 import { Client } from "@xmtp/xmtp-js";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { WalletContext } from "./WalletContext";
 
 export const XmtpContext = createContext();
@@ -17,7 +17,16 @@ export const XmtpContextProvider = ({ children }) => {
   const initClient = async (wallet) => {
     if (wallet && !providerState.client) {
       try {
-        const keys = await Client.getKeys(signer, { env: "dev" });
+        const cachedKeys = localStorage.getItem("keys");
+
+        const keys = cachedKeys
+          ? new Uint8Array(Buffer.from(cachedKeys.split(",").map((x) => +x)))
+          : await Client.getKeys(signer, { env: "dev" });
+
+        if (!cachedKeys) {
+          localStorage.setItem("keys", keys.toString());
+        }
+
         const client = await Client.create(null, {
           env: "dev",
           privateKeyOverride: keys,
