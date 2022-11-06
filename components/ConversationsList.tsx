@@ -46,7 +46,7 @@ const ConversationTile = ({
         return { message: `Your move`, highlight: false }
       }
     } catch (err) {
-      return { message: latestMessage?.content, highlight: false }
+      return { message: 'New game', highlight: false }
     }
   }, [latestMessage?.content])
 
