@@ -55,7 +55,7 @@ const Conversation = ({
   if (loadingConversations && !hasMessages) {
     return (
       <Loader
-        headingText="Loading messages..."
+        headingText="Loading game..."
         subHeadingText="Please wait a moment"
         isLoading
       />

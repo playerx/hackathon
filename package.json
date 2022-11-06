@@ -23,6 +23,7 @@
   "dependencies": {
     "@headlessui/react": "^1.4.3",
     "@heroicons/react": "^1.0.5",
+    "@ionic/react": "^6.3.4",
     "@xmtp/xmtp-js": "^6.8.3",
     "ethers": "^5.5.3",
     "imagemin-svgo": "^9.0.0",
@@ -31,7 +32,8 @@
     "react": "17.0.2",
     "react-blockies": "^1.4.1",
     "react-dom": "17.0.2",
-    "react-emoji-render": "^1.2.4"
+    "react-emoji-render": "^1.2.4",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.4.0",
@@ -42,6 +44,7 @@
     "@types/jest": "^27.4.0",
     "@types/node": "17.0.13",
     "@types/react": "17.0.38",
+    "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@walletconnect/web3-provider": "^1.7.1",
     "autoprefixer": "^10.4.2",
