@@ -1,14 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, {
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react'
+import styled from 'styled-components'
 import Loader from '../../components/Loader'
+import { WalletContext } from '../../contexts/wallet'
 import XmtpContext from '../../contexts/xmtp'
 import useConversation from '../../hooks/useConversation'
 import { ReversiGame } from '../ReversiGame'
+import MessageComposer from './MessageComposer'
+import MessagesList from './MessagesList'
 
 type ConversationProps = {
   recipientWalletAddr: string
@@ -17,7 +23,11 @@ type ConversationProps = {
 const Conversation = ({
   recipientWalletAddr,
 }: ConversationProps): JSX.Element => {
+  const { address } = useContext(WalletContext)
+
   const messagesEndRef = useRef(null)
+
+  const [isDebugMode, setDebugMode] = useState(false)
 
   const scrollToMessagesEndRef = useCallback(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,6 +42,11 @@ const Conversation = ({
   const { convoMessages, loadingConversations } = useContext(XmtpContext)
 
   const messages = useMemo(
+    () => convoMessages.get(recipientWalletAddr) ?? [],
+    [convoMessages, recipientWalletAddr]
+  )
+
+  const plainMessages = useMemo(
     () =>
       (convoMessages.get(recipientWalletAddr) ?? [])
         .map((x) => x.content ?? '')
@@ -43,6 +58,7 @@ const Conversation = ({
 
   useEffect(() => {
     if (!messages || !messagesEndRef.current) return
+
     setTimeout(() => {
       scrollToMessagesEndRef()
     }, 1000)
@@ -63,13 +79,63 @@ const Conversation = ({
   }
 
   return (
-    <ReversiGame actions={messages} onSend={(action) => sendMessage(action)} />
+    <Root>
+      <header>
+        <label>
+          <input
+            type="checkbox"
+            onChange={(e: any) => {
+              setDebugMode(e.target.checked)
+            }}
+          />
+          Debug
+        </label>
+      </header>
 
-    // <main className="flex flex-col flex-1 bg-white h-screen">
-    //   <MessagesList messagesEndRef={messagesEndRef} messages={messages} />
-    //   <MessageComposer onSend={sendMessage} />
-    // </main>
+      {!isDebugMode && (
+        <section>
+          <ReversiGame
+            userIds={[address!, recipientWalletAddr]}
+            actions={plainMessages}
+            onSend={(action) => sendMessage(action)}
+          />
+        </section>
+      )}
+      {isDebugMode && (
+        <main className="flex flex-col flex-1 bg-white h-screen">
+          <MessagesList messagesEndRef={messagesEndRef} messages={messages} />
+          <MessageComposer onSend={sendMessage} />
+        </main>
+      )}
+    </Root>
   )
 }
+
+const Root = styled.main`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 50px;
+
+  > header {
+    height: 50px;
+    margin-top: -50px;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    label {
+      cursor: pointer;
+    }
+  }
+
+  > section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`
 
 export default React.memo(Conversation)

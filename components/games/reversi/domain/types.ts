@@ -1,18 +1,9 @@
 export type RoomUserType = 'PLAYER' | 'VIEWER'
 
 type RoomState = {
-  id: string
+  // id: string
 
   status: 'ACTIVE' | 'FINISHED'
-
-  sessions: {
-    type: RoomUserType
-    userId: string
-    sessionId: string | null
-    isOnline: boolean
-    joinedAt: Date | null
-    leftAt: Date | null
-  }[]
 }
 
 export type ReversiRoomState = RoomState & {
@@ -37,7 +28,6 @@ export type ReversiPlayer = {
 
 export type ReversiMove = {
   userId: string
-  sessionId: string
   point: Point
   reversedDisks: Point[]
   timestamp: Date
@@ -56,30 +46,15 @@ export type ReducedResult<TState, TEvent> = [
 export type ReversiRoomAction =
   | {
       type: 'INIT'
-      roomId: string
+      protocolVersion: string
+      userIds: string[]
       width: number
       height: number
-      userIds: string[]
-    }
-  | {
-      type: 'JOIN'
       userId: string
-      sessionId: string
-    }
-  | {
-      type: 'JOIN_AS_PLAYER'
-      userId: string
-      sessionId: string
-    }
-  | {
-      type: 'LEAVE'
-      userId: string
-      sessionId: string
     }
   | {
       type: 'MOVE'
       userId: string
-      sessionId: string
       point: Point
     }
 
@@ -125,7 +100,6 @@ export type ReversiRoomEvent =
   | {
       type: 'MOVE_REQUEST'
       userId: string
-      sessionId: string
       possibleMoves: Point[]
     }
 

@@ -1,3 +1,4 @@
+import { generatePossibleMoves } from './domain/generatePossibleMoves'
 import {
   ActionOf,
   ReducedResult,
@@ -9,27 +10,15 @@ export function initAction(
   _: ReversiRoomState,
   props: ActionOf<'INIT'>
 ): ReducedResult<ReversiRoomState, ReversiRoomEvent> {
-  const { roomId, width, height, userIds } = props
+  const { width, height, userIds, userId } = props
 
   const events: ReversiRoomEvent[] = []
 
   const room = {
-    id: roomId,
-
     status: 'ACTIVE',
-
-    sessions: userIds.map((x) => ({
-      type: 'PLAYER',
-      userId: x,
-      sessionId: null,
-      isOnline: false,
-      joinedAt: null,
-      leftAt: null,
-    })),
-
     width,
     height,
-    activeUserId: userIds[0],
+    activeUserId: userId,
     winnerUserId: null,
     players: userIds.map((x) => ({ userId: x, disksCount: 2 })),
     moves: [],
@@ -38,6 +27,14 @@ export function initAction(
       .map(() => new Array(height).fill(0).map(() => null)),
     possibleMoves: [],
   } as ReversiRoomState
+
+  room.cells[Math.ceil(width / 2)][Math.floor(height / 2) - 1] = userIds[0]
+  room.cells[Math.ceil(width / 2) - 1][Math.floor(height / 2) - 1] = userIds[0]
+
+  room.cells[Math.ceil(width / 2) - 1][Math.floor(height / 2)] = userIds[1]
+  room.cells[Math.ceil(width / 2)][Math.floor(height / 2)] = userIds[1]
+
+  room.possibleMoves = generatePossibleMoves(room.cells, room.activeUserId)
 
   return [room, events]
 }

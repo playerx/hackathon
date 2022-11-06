@@ -9,6 +9,8 @@ type AddressProps = {
 const Address = ({ address, className }: AddressProps): JSX.Element => {
   const { name, loading } = useEns(address)
 
+  console.log('BBBBBB', address)
+
   return (
     <span
       className={classNames(

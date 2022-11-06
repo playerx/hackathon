@@ -1,5 +1,5 @@
 import { Conversation, Message, Stream } from '@xmtp/xmtp-js'
-import { useState, useEffect, useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { WalletContext } from '../contexts/wallet'
 import XmtpContext from '../contexts/xmtp'
 import { checkIfPathIsEns, shortAddress, truncate } from '../helpers'
@@ -56,6 +56,7 @@ const useConversation = (
           msg.senderAddress !== walletAddress &&
           !browserVisible
         ) {
+          console.log('AAAAA', msg)
           const name = await lookupAddress(msg.senderAddress ?? '')
           new Notification('XMTP', {
             body: `${name || shortAddress(msg.senderAddress ?? '')}\n${truncate(

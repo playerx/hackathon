@@ -12,7 +12,7 @@ export function moveAction(
   room: ReversiRoomState,
   props: ActionOf<'MOVE'>
 ): ReducedResult<ReversiRoomState, ReversiRoomEvent> {
-  const { userId, sessionId, point } = props
+  const { userId, point } = props
 
   const events: ReversiRoomEvent[] = []
 
@@ -22,17 +22,8 @@ export function moveAction(
     throw new Error('ROOM_ALREADY_FINISHED')
   }
 
-  const session = room.sessions.find(
-    (x) =>
-      x.type === 'PLAYER' && x.userId === userId && x.sessionId === sessionId
-  )
-
-  if (!session) {
-    throw new Error('SESSION_NOT_ACTIVE')
-  }
-
   if (room.activeUserId === userId) {
-    throw new Error('USER_NOT_ACTIVE')
+    return [room, []]
   }
 
   if (room.cells[point.y][point.x]) {
@@ -52,7 +43,6 @@ export function moveAction(
 
   room.moves.push({
     userId,
-    sessionId,
     point,
     reversedDisks,
     timestamp: now,
@@ -80,9 +70,7 @@ export function moveAction(
   }
 
   // change active player on every move
-  const userIds = room.sessions
-    .filter((x) => x.type === 'PLAYER')
-    .map((x) => x.userId)
+  const userIds = room.players.map((x) => x.userId)
 
   const opponentUserId = userIds.filter((x) => x !== room.activeUserId)[0]
 
@@ -110,14 +98,9 @@ export function moveAction(
     userId: room.activeUserId,
   })
 
-  const activeSession = room.sessions.find(
-    (x) => x.type === 'PLAYER' && x.userId === room.activeUserId
-  )
-
   events.push({
     type: 'MOVE_REQUEST',
     userId: room.activeUserId,
-    sessionId: activeSession?.sessionId ?? '',
     possibleMoves: room.possibleMoves,
   })
 
