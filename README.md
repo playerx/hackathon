@@ -1,111 +1,67 @@
-# Get started with the XMTP Quickstart React App
+# React Chat Example
 
-XMTP (Extensible Message Transport Protocol) is an open protocol and network for secure and private web3 messaging. For example, you can build an app with XMTP to provide messaging between blockchain accounts, including 1:1 chat, alerts, announcements, and more. To learn more, see [Introduction to XMTP](https://xmtp.org/docs/dev-concepts/introduction).
+![Test](https://github.com/xmtp/example-chat-react/actions/workflows/test.yml/badge.svg)
+![Lint](https://github.com/xmtp/example-chat-react/actions/workflows/lint.yml/badge.svg)
+![Build](https://github.com/xmtp/example-chat-react/actions/workflows/build.yml/badge.svg)
 
-The XMTP Quickstart React App is an example app that you can use as a developer tool to learn how to build with XMTP.
+![x-red-sm](https://user-images.githubusercontent.com/510695/163488403-1fb37e86-c673-4b48-954e-8460ae4d4b05.png)
 
-The app provides 1:1 chat functionality and is intentionally built with lightweight code to help make it easier to parse and start learning to build with XMTP.
+**Example chat application demonstrating the core concepts and capabilities of the XMTP client SDK**
 
-The app is built in React and uses the following SDK and library:
+This application is built with React, [Next.js](https://nextjs.org/), and the [`xmtp-js` client SDK](https://github.com/xmtp/xmtp-js).
 
-* The [XMTP JavaScript SDK](https://github.com/xmtp/xmtp-js) for communicating with the XMTP network
+Use the application to send and receive messages using the XMTP `dev` network environment, with some [important considerations](#considerations). You are also free to customize and deploy the application.
 
-* The [web3modal library](https://github.com/WalletConnect/web3modal) for enabling MetaMask to connect to the app
+This application is maintained by [XMTP Labs](https://xmtp.com) and distributed under [MIT License](./LICENSE) for learning about and developing applications built with XMTP, a messaging protocol and decentralized communication network for blockchain wallets. The application has not undergone a formal security audit.
 
-## Prerequisites
+## Getting Started
 
-To install and run the XMTP Quickstart React App, you must have the following prerequisites installed:
+### Configure Infura
 
-* [Node](https://nodejs.org/en/download/) (LTS version) and npm to install and run the app
+Add your Infura ID to `.env.local` in the project's root.
 
-* [MetaMask](https://metamask.io/) browser extension to sign in to the app
-
-   * It's also helpful to have a basic understanding of [how the MetaMask wallet app works](https://docs.metamask.io/guide/).
-
-* A code editor of your choice if you want to explore and build upon the app code.
-
-## Clone the repo
-
-For example, run:
-
-```bash
-git clone git@github.com:xmtp/xmtp-quickstart-react.git
+```
+NEXT_PUBLIC_INFURA_ID={YOUR_INFURA_ID}
 ```
 
-## Install the app
+If you do not have an Infura ID, you can follow [these instructions](https://blog.infura.io/getting-started-with-infura-28e41844cc89/) to get one.
 
-In the root directory of `xmtp-quickstart-react`, run:
+_This example comes preconfigured with an Infura ID provided for demonstration purposes. If you plan to fork or host it, you must use your own Infura ID as detailed above._
+
+### Install the package
 
 ```bash
 npm install
 ```
 
-## Run the app
+### Run the development server
 
 ```bash
-npm start
+npm run dev
 ```
 
-The XMTP Quickstart React App opens at [http://localhost:3000/](http://localhost:3000/) in your default browser.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-The app is running locally and, by default, is configured to connect to the XMTP `dev` network. To learn more about the `dev` network, see [XMTP `product` and `dev` network environments](https://github.com/xmtp/xmtp-js#xmtp-production-and-dev-network-environments).
+## Functionality
 
-![Shows the landing page of the XMTP Quickstart React App in an unconnected state, including a Connect wallet button, New message button, and an empty Conversations panel](src/assets/xmtp-quickstart-react-app.png)
+### Wallet Connections
 
-<!--- To learn how to get started building with XMTP, see Get started with building messaging between blockchain accounts using XMTP and React.-->
+[`Web3Modal`](https://github.com/Web3Modal/web3modal) is used to inject a Metamask, Coinbase Wallet, or WalletConnect provider through [`ethers`](https://docs.ethers.io/v5/). Methods for connecting and disconnecting are included in `WalletProvider` alongside the provider, signer, wallet address, and ENS utilities.
 
-- For a quickstart guide to building with XMTP, see the [XMTP JavaScript SDK README](https://github.com/xmtp/xmtp-js#readme).
+To use the application's chat functionality, the connected wallet must provide two signatures:
 
-- To explore the example XMTP Chat App, which includes more advanced features, see the [example-chat-react app repo](https://github.com/xmtp/example-chat-react) and the [hosted example-chat-react app](https://xmtp.chat/).
+1. A one-time signature that is used to generate the wallet's private XMTP identity
+2. A signature that is used on application start-up to initialize the XMTP client with that identity
 
-Have questions or feedback?
+### Chat Conversations
 
-* [XMTP Discord chat](https://discord.gg/xmtp)
+The application uses the `xmtp-js` [Conversations](https://github.com/xmtp/xmtp-js#conversations) abstraction to list the available conversations for a connected wallet and to listen for or create new conversations. For each conversation, the application gets existing messages and listens for or creates new messages. Conversations and messages are kept in a lightweight store and made available through `XmtpProvider`.
 
-* [XMTP Q&A GitHub discussion forum](https://github.com/orgs/xmtp/discussions)
+### Considerations
 
-## Use the XMTP Quickstart React App
+Here are some important considerations when working with the example chat application:
 
-1. Click **Connect wallet**.
-
-2. The MetaMask wallet app extension appears. Select the wallet address (account) you want to use to send messages from using XMTP Quickstart React App. Click **Next**.
-
-3. Confirm that you agree to connect your wallet address to the XMTP Quickstart React App. Click **Connect**.
-
-4. After you've connected your wallet address to the XMTP Quickstart React App using MetaMask, you need to connect the XMTP Quickstart React App to the XMTP network. Click **Connect to XMTP**.
-
-5. If this is your first time using an app built with XMTP, MetaMask prompts you to sign to create an XMTP identity. Creating an XMTP identity is like creating a messaging account associated with your wallet address. Click **Sign**.
-
-6. MetaMask then prompts you to enable your XMTP identity. Enabling your XMTP identity is like entering a password to access your messaging account. Click **Sign**.
-
-   To learn more about these signatures, see [Sign to send and receive messages using apps built with XMTP](https://xmtp.org/docs/dev-concepts/signatures).
-
-7. The XMTP Quickstart React App is now ready for you to send a message. Click **New message** to start a new conversation.
-
-8. Enter the full wallet address to which you want to send a message. For example, you can message **_0x194c31cAe1418D5256E8c58e0d08Aee1046C6Ed0_** to say hello to the team working on advancing the development of XMTP.
-
-   ![Shows the new message panel in the XMTP Quickstart React App with a message "Testing 1, 2, 3 - hello!" composed to be send to the wallet address 0x194c31cAe1418D5256E8c58e0d08Aee1046C6Ed0](src/assets/testing-1-2-3.png)
-
-   To send a message to a wallet address, the wallet address must have an existing XMTP identity. For example, the controller of the wallet address must have already signed to create their identity in the same way you created an XMTP identity for your wallet address in step 5. If the wallet address does not have an XMTP identity, the **Invalid wallet** error appears.
-
-## FAQ
-
-### How do I add support for wallets other than MetaMask to this app?
-
-While the XMTP Quickstart React App intentionally supports MetaMask only to keep the code lightweight, you can use XMTP with any Ethereum Virtual Machine-compatible wallet apps that support ECDSA signing on the secp256k1 elliptic curve. These include common wallet apps such as MetaMask, Coinbase Wallet, and Rainbow Wallet, as well as most wallet apps in the WalletConnect network.
-
-For example, the XMTP Chat App, which includes more advanced features than the XMTP Quickstart React App, includes support for MetaMask, as well as Coinbase Wallet and WalletConnect.
-
-To learn about how the XMTP Chat App provides this support, see:
-
-- The [Wallet Connections](https://github.com/xmtp/example-chat-react/blob/c0d37c9d9c84d7b28a80a4d4ca129457bbf2c02e/README.md#wallet-connections) topic in the XMTP Chat app repo README
-
-- The [`WalletProvider` component](https://github.com/xmtp/example-chat-react/blob/526c9dc6bbb9560023b771365f37b80a9a73a116/components/WalletProvider.tsx) in the XMTP Chat app repo
-
-### How do I add support for ENS names to this app?
-
-While the XMTP Quickstart React App intentionally supports full wallet addresses only to keep the code lightweight, XMTP works with any web3 identities that apps built with XMTP can derive from Ethereum accounts, such as Ethereum Name Service (ENS) names.
-
-For example, the XMTP Chat App, which includes more advanced features than the XMTP Quickstart React App, includes support for ENS names.
-
-To learn about how the XMTP Chat App provides this support, see [`useEns.ts` hook](https://github.com/xmtp/example-chat-react/blob/fe6c62eda312de5dd0fe0efba17d2ebb633599e6/hooks/useEns.ts) in the XMTP Chat app repo.
+- The application sends and receives messages using the XMTP `dev` network environment. To connect to the `production` network instead, set the following environment variable `NEXT_PUBLIC_XMTP_ENVIRONMENT=production`.
+     - XMTP may occasionally delete messages and keys from the `dev` network, and will provide advance notice in the XMTP Discord community ([request access](https://xmtp.typeform.com/to/yojTJarb?utm_source=docs_home)). The `production` network is configured to store messages indefinitely. 
+- You can't yet send a message to a wallet address that hasn't used XMTP. The client displays an error when it looks up an address that doesn't have an identity broadcast on the XMTP network.
+   - This limitation will soon be resolved by improvements to the `xmtp-js` library that will allow messages to be created and stored for future delivery, even if the recipient hasn't used XMTP yet.
