@@ -50,7 +50,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
 
     return lastGameActions.reduce(
       (r, x) => {
-        const t = reversiGameReducer(r, x, { currentUserId: address! })
+        const t = reversiGameReducer(r, x)
 
         return t[0]
       },

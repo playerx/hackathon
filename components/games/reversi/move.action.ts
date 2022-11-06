@@ -49,6 +49,8 @@ export function moveAction(
     timestamp: now,
   })
 
+  room.cells[point.y][point.x] = userId
+
   events.push({
     type: 'MOVE_ADDED',
     userId,
@@ -105,5 +107,5 @@ export function moveAction(
     possibleMoves: room.possibleMoves,
   })
 
-  return [room, events]
+  return [{ ...room }, events]
 }
