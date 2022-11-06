@@ -1,20 +1,19 @@
-import React, { useContext, useEffect } from 'react'
-import Link from 'next/link'
 import { ChatIcon } from '@heroicons/react/outline'
-import Address from './Address'
+import { Conversation, Message } from '@xmtp/xmtp-js'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Conversation } from '@xmtp/xmtp-js'
-import { Message } from '@xmtp/xmtp-js'
-import {
-  classNames,
-  truncate,
-  formatDate,
-  checkPath,
-  checkIfPathIsEns,
-} from '../helpers'
-import Avatar from './Avatar'
-import XmtpContext from '../contexts/xmtp'
+import React, { useContext, useEffect } from 'react'
 import { WalletContext } from '../contexts/wallet'
+import XmtpContext from '../contexts/xmtp'
+import {
+  checkIfPathIsEns,
+  checkPath,
+  classNames,
+  formatDate,
+  truncate,
+} from '../helpers'
+import Address from './Address'
+import Avatar from './Avatar'
 
 type ConversationTileProps = {
   conversation: Conversation
@@ -30,15 +29,30 @@ const ConversationTile = ({
   isSelected,
   onClick,
 }: ConversationTileProps): JSX.Element | null => {
+  const { address } = useContext(WalletContext)
   const { convoMessages, loadingConversations } = useContext(XmtpContext)
-
-  if (!convoMessages.get(conversation.peerAddress)?.length) {
-    return null
-  }
 
   const latestMessage = getLatestMessage(
     convoMessages.get(conversation.peerAddress) ?? []
   )
+
+  const moveInfo = React.useMemo(() => {
+    try {
+      const action = JSON.parse(latestMessage?.content)
+
+      if (action.userId === address) {
+        return { message: `Opponent's move`, highlight: false }
+      } else {
+        return { message: `Your move`, highlight: false }
+      }
+    } catch (err) {
+      return { message: latestMessage?.content, highlight: false }
+    }
+  }, [latestMessage?.content])
+
+  if (!convoMessages.get(conversation.peerAddress)?.length) {
+    return null
+  }
   const path = `/dm/${conversation.peerAddress}`
 
   if (!latestMessage) {
@@ -90,10 +104,11 @@ const ConversationTile = ({
               className={classNames(
                 'text-[13px] md:text-sm font-normal text-ellipsis mt-0',
                 isSelected ? 'text-n-500' : 'text-n-300',
-                loadingConversations ? 'animate-pulse' : ''
+                loadingConversations ? 'animate-pulse' : '',
+                moveInfo.highlight ? 'font-bold' : ''
               )}
             >
-              {latestMessage && truncate(latestMessage.content, 75)}
+              {moveInfo.message && truncate(moveInfo.message, 75)}
             </p>
           </div>
         </div>

@@ -48,6 +48,8 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
     const startIndex = lastGameActions.map((x) => x.type).lastIndexOf('INIT')
     lastGameActions = lastGameActions.slice(startIndex)
 
+    console.log('lastGameActions', lastGameActions)
+
     return lastGameActions.reduce(
       (r, x) => {
         const t = reversiGameReducer(r, x)
@@ -103,7 +105,7 @@ export const ReversiGame: React.FC<Props> = ({ userIds, actions, onSend }) => {
       )
   }, [state, address])
 
-  console.log(state)
+  console.log('state', state)
 
   return (
     <Board
