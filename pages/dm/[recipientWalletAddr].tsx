@@ -1,11 +1,10 @@
-import React, { useContext } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Conversation } from '../../components/Conversation'
-import { checkPath } from '../../helpers'
-import XmtpContext from '../../contexts/xmtp'
 import { WalletContext } from '../../contexts/wallet'
+import XmtpContext from '../../contexts/xmtp'
+import { checkPath } from '../../helpers'
 
 const ConversationPage: NextPage = () => {
   const router = useRouter()
@@ -42,8 +41,9 @@ const ConversationPage: NextPage = () => {
     redirectToHome()
   }, [window.location.pathname])
 
-  if (!canMessageAddr || !client) return <div />
-  else {
+  if (!canMessageAddr || !client) {
+    return <div />
+  } else {
     return <Conversation recipientWalletAddr={recipientWalletAddr} />
   }
 }

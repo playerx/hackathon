@@ -5,10 +5,10 @@ import React, {
   useMemo,
   useRef,
 } from 'react'
-import { MessagesList, MessageComposer } from './'
 import Loader from '../../components/Loader'
 import XmtpContext from '../../contexts/xmtp'
 import useConversation from '../../hooks/useConversation'
+import { ReversiGame } from '../ReversiGame'
 
 type ConversationProps = {
   recipientWalletAddr: string
@@ -32,7 +32,10 @@ const Conversation = ({
   const { convoMessages, loadingConversations } = useContext(XmtpContext)
 
   const messages = useMemo(
-    () => convoMessages.get(recipientWalletAddr) ?? [],
+    () =>
+      (convoMessages.get(recipientWalletAddr) ?? [])
+        .map((x) => x.content ?? '')
+        .filter((x) => !!x),
     [convoMessages, recipientWalletAddr]
   )
 
@@ -60,10 +63,12 @@ const Conversation = ({
   }
 
   return (
-    <main className="flex flex-col flex-1 bg-white h-screen">
-      <MessagesList messagesEndRef={messagesEndRef} messages={messages} />
-      <MessageComposer onSend={sendMessage} />
-    </main>
+    <ReversiGame actions={messages} onSend={(action) => sendMessage(action)} />
+
+    // <main className="flex flex-col flex-1 bg-white h-screen">
+    //   <MessagesList messagesEndRef={messagesEndRef} messages={messages} />
+    //   <MessageComposer onSend={sendMessage} />
+    // </main>
   )
 }
 
